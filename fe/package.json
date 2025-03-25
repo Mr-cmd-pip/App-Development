@@ -13,7 +13,7 @@
     "@testing-library/user-event": "^13.5.0",
     "fe": "file:",
     "landing-page": "file:",
-    "motion": "^12.5.0",
+    "motion": "^12.6.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-scripts": "5.0.1",

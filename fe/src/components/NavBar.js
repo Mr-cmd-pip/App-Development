@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Button, Box } from "@mui/material";
 function NavBar({ onScroll, homeRef, aboutRef, contactRef }) {
   return (
     <AppBar position="fixed" sx={{ background: "#333" }}>
-      <Toolbar sx={{ justifyContent: "center" }}>
+      <Toolbar sx={{ justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", gap: 2 }}>
           <Button color="inherit" onClick={() => onScroll(homeRef)}>
             Home
@@ -14,6 +14,10 @@ function NavBar({ onScroll, homeRef, aboutRef, contactRef }) {
           <Button color="inherit" onClick={() => onScroll(contactRef)}>
             Contact Us
           </Button>
+        </Box>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Button sx={{ bgcolor: "inherit", color: "white" }}>Login</Button>
+          <Button sx={{ bgcolor: "gold", color: "maroon" }}>Register</Button>
         </Box>
       </Toolbar>
     </AppBar>
