@@ -1,6 +1,8 @@
 import { useRef } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import HomePage from "./pages/HomePage/HomePage";
+import RegisterPage from "./pages/RegistrationPage/RegisterPage";
 
 function App() {
   const homeRef = useRef(null);
@@ -12,15 +14,27 @@ function App() {
   };
 
   return (
-    <div>
+    <Router>
       <NavBar
         onScroll={handleScroll}
         homeRef={homeRef}
         aboutRef={aboutRef}
         contactRef={contactRef}
       />
-      <HomePage homeRef={homeRef} aboutRef={aboutRef} contactRef={contactRef} />
-    </div>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <HomePage
+              homeRef={homeRef}
+              aboutRef={aboutRef}
+              contactRef={contactRef}
+            />
+          }
+        />
+        <Route path="/register" element={<RegisterPage />} />
+      </Routes>
+    </Router>
   );
 }
 
