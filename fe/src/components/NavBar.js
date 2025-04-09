@@ -1,6 +1,9 @@
 import { AppBar, Toolbar, Button, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function NavBar({ onScroll, homeRef, aboutRef, contactRef }) {
+  const navigate = useNavigate();
+
   return (
     <AppBar position="fixed" sx={{ background: "#333" }}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
@@ -16,7 +19,8 @@ function NavBar({ onScroll, homeRef, aboutRef, contactRef }) {
           </Button>
         </Box>
         <Box sx={{ display: "flex", gap: 2 }}>
-          <Button sx={{ bgcolor: "inherit", color: "white" }}>Login</Button>
+          <Button sx={{ bgcolor: "inherit", color: "white" }}
+          onClick={() => navigate("/admin_dashboard")}>Login</Button>
           <Button sx={{ bgcolor: "gold", color: "maroon" }}>Register</Button>
         </Box>
       </Toolbar>
