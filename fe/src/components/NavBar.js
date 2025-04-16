@@ -21,7 +21,8 @@ function NavBar({ onScroll, homeRef, aboutRef, contactRef }) {
         <Box sx={{ display: "flex", gap: 2 }}>
           <Button sx={{ bgcolor: "inherit", color: "white" }}
           onClick={() => navigate("/admin_dashboard")}>Login</Button>
-          <Button sx={{ bgcolor: "gold", color: "maroon" }}>Register</Button>
+          <Button sx={{ bgcolor: "gold", color: "maroon" }}
+          onClick={() => navigate("/register")}>Register</Button>
         </Box>
       </Toolbar>
     </AppBar>
