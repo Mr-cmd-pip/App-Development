@@ -15,7 +15,7 @@ export const SideBarData = [
     {
         title: 'Calendar',
         icon: <CalendarMonthIcon />,
-        link: '/admin_Calendar'
+        link: '/admin_calendar'
     },
     {
         title: 'Approved',
@@ -35,6 +35,6 @@ export const SideBarData = [
     {
         title: 'Logout',
         icon: <LogoutIcon />,
-        link: '/logout'
+        link: '/'
     }
 ]
