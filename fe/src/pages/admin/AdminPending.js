@@ -2,12 +2,12 @@ import React from 'react';
 import "../../css/Sidebar.css";
 import Sidebar from '../../components/SideBar';
 
-function AdminDashboard() {
+function AdminPending() {
     return (
-        <div className='dashboard'>
+        <div className='pending'>
             <Sidebar />
         </div>
     )
 }
 
-export default AdminDashboard;
+export default AdminPending;

@@ -20,7 +20,7 @@ export const SideBarData = [
     {
         title: 'Approved',
         icon: <DoneOutlineIcon />,
-        link: '/admin_aprroved'
+        link: '/admin_approved'
     },
     {
         title: 'Declined',

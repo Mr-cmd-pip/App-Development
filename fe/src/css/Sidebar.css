@@ -8,6 +8,26 @@ body {
     width: 100vw;
 }
 
+.approved {
+    height: 100vh;
+    width: 100vw;
+}
+
+.declined {
+    height: 100vh;
+    width: 100vw;
+}
+
+.admin-calendar {
+    height: 100vh;
+    width: 100vw;
+}
+
+.pending {
+    height: 100vh;
+    width: 100vw;
+}
+
 .sidebar {
     height: 100%;
     width: 250px;

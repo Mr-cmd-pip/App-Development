@@ -2,12 +2,12 @@ import React from 'react';
 import "../../css/Sidebar.css";
 import Sidebar from '../../components/SideBar';
 
-function AdminDashboard() {
+function AdminCalendar() {
     return (
-        <div className='dashboard'>
+        <div className='admin-calendar'>
             <Sidebar />
         </div>
     )
 }
 
-export default AdminDashboard;
+export default AdminCalendar;
