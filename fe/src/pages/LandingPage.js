@@ -9,7 +9,7 @@ import {
   Divider,
 } from "@mui/material";
 import { motion } from "motion/react";
-function HomePage({ homeRef, aboutRef, contactRef }) {
+function LandingPage({ homeRef, aboutRef, contactRef }) {
   return (
     <div>
       {/* Hero Section */}
@@ -241,4 +241,4 @@ const styles = {
   },
 };
 
-export default HomePage;
+export default LandingPage;

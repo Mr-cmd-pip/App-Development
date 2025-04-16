@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import HomePage from "./pages/LandingPage";
 import RegisterPage from "./pages/RegisterPage";
-import Dashboard from "./pages/Dashboard";
+import Login from "./pages/LoginPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 function App() {
   const homeRef = useRef(null);
@@ -34,7 +35,8 @@ function App() {
             />
           }
         />
-        <Route path="/admin_dashboard" element={<Dashboard />} />
+        <Route path="/login" element={<Login />} />
+        <Route path='/admin_dashboard' element={<AdminDashboard />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
     </Router>
