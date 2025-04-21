@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/LandingPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -8,7 +9,11 @@ import Declined from "./pages/admin/AdminDeclined";
 import Pending from "./pages/admin/AdminPending";
 import AdminCalendar from "./pages/admin/AdminCalendar";
 
-function App({ homeRef, aboutRef, contactRef }) {
+function App() {
+  const homeRef = useRef(null);
+  const aboutRef = useRef(null);
+  const contactRef = useRef(null);
+  
   return (
     <Router>
       <Routes>
