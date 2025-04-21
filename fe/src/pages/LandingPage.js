@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { motion } from "motion/react";
 import NavBar from "../components/NavBar";
+
 function LandingPage({ homeRef, aboutRef, contactRef }) {
 
   const handleScroll = (ref) => {
