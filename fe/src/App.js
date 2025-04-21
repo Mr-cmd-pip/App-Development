@@ -27,13 +27,39 @@ function App() {
             />
           }
         />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path='/admin_dashboard' element={<AdminDashboard />} />
-        <Route path='/admin_approved' element={<Approved />} />
-        <Route path='/admin_declined' element={<Declined />} />
-        <Route path='/admin_pending' element={<Pending />} />
-        <Route path='/admin_calendar' element={<AdminCalendar />} />
+        <Route 
+          path="/login" 
+          element={
+            <Login />} 
+        />
+        <Route 
+          path="/register" 
+          element={
+            <RegisterPage />} 
+        />
+        <Route 
+          path='/admin/dashboard' 
+          element={
+            <AdminDashboard />}  
+        />
+        <Route 
+          path='/admin/approved' 
+          element={
+            <Approved />} 
+        />
+        <Route 
+          path='/admin/declined' 
+          element={<Declined />} 
+        />
+        <Route 
+          path='/admin/pending' 
+          element={
+            <Pending />} 
+        />
+        <Route 
+          path='/admin/calendar' 
+          element={<AdminCalendar />} 
+          />
       </Routes>
     </Router>
   );

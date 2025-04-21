@@ -168,7 +168,7 @@ const LoginPage = () => {
                 color: "maroon",
                 fontWeight: "bold",
               }}
-              onClick={() => navigate("/admin_dashboard")}>
+              onClick={() => navigate("/admin/dashboard")}>
               Login
             </Button>
           </form>

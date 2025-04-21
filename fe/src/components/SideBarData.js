@@ -10,27 +10,27 @@ export const SideBarData = [
     {
         title: 'Home',
         icon: <HomeIcon />,
-        link: '/admin_dashboard'
+        link: '/admin/dashboard'
     },
     {
         title: 'Calendar',
         icon: <CalendarMonthIcon />,
-        link: '/admin_calendar'
+        link: '/admin/calendar'
     },
     {
         title: 'Approved',
         icon: <DoneOutlineIcon />,
-        link: '/admin_approved'
+        link: '/admin/approved'
     },
     {
         title: 'Declined',
         icon: <ThumbDownAltIcon />,
-        link: '/admin_declined'
+        link: '/admin/declined'
     },
     {
         title: 'Pending',
         icon: <PendingIcon />,
-        link: '/admin_pending'
+        link: '/admin/pending'
     },
     {
         title: 'Logout',
