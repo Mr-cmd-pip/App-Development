@@ -9,9 +9,21 @@ import {
   Divider,
 } from "@mui/material";
 import { motion } from "motion/react";
+import NavBar from "../components/NavBar";
 function LandingPage({ homeRef, aboutRef, contactRef }) {
+
+  const handleScroll = (ref) => {
+    ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div>
+      <NavBar
+        onScroll={handleScroll}
+        homeRef={homeRef}
+        aboutRef={aboutRef}
+        contactRef={contactRef}
+      />
       {/* Hero Section */}
       <Box ref={homeRef} sx={styles.heroSection}>
         <Container maxWidth="md" sx={{ textAlign: "center", zIndex: 1 }}>

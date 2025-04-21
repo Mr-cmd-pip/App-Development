@@ -1,7 +1,4 @@
-
-import { useRef } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import NavBar from "./components/NavBar";
 import HomePage from "./pages/LandingPage";
 import RegisterPage from "./pages/RegisterPage";
 import Login from "./pages/LoginPage";
@@ -11,23 +8,9 @@ import Declined from "./pages/admin/AdminDeclined";
 import Pending from "./pages/admin/AdminPending";
 import AdminCalendar from "./pages/admin/AdminCalendar";
 
-function App() {
-  const homeRef = useRef(null);
-  const aboutRef = useRef(null);
-  const contactRef = useRef(null);
-
-  const handleScroll = (ref) => {
-    ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
+function App({ homeRef, aboutRef, contactRef }) {
   return (
     <Router>
-      <NavBar
-        onScroll={handleScroll}
-        homeRef={homeRef}
-        aboutRef={aboutRef}
-        contactRef={contactRef}
-      />
       <Routes>
         <Route
           path="/"
