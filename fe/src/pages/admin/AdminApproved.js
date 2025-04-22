@@ -4,8 +4,11 @@ import Sidebar from '../../components/SideBar';
 
 function AdminApproved() {
     return (
-        <div className='approved'>
+        <div style={{ display: 'flex', height: '100vh' }}>
             <Sidebar />
+            <div style={{ flex: 1, padding: '20px' }}>
+                <h1>Hello from Approved</h1>
+            </div>
         </div>
     )
 }
