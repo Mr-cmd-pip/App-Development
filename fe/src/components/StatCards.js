@@ -1,36 +1,37 @@
 import React from 'react';
 import { FaCheckCircle, FaTimesCircle, FaClock } from 'react-icons/fa';
+import '../css/StatCards.css'; //
 
 const statData = [
   {
     label: 'Pending Requests',
-    value: 12, // Replace this with dynamic data
-    icon: <FaClock className="text-yellow-500 text-3xl" />,
-    bg: 'bg-yellow-100'
+    value: 12,
+    icon: <FaClock className="icon icon-pending" />,
+    bgClass: 'bg-pending'
   },
   {
     label: 'Approved Requests',
     value: 8,
-    icon: <FaCheckCircle className="text-green-500 text-3xl" />,
-    bg: 'bg-green-100'
+    icon: <FaCheckCircle className="icon icon-approved" />,
+    bgClass: 'bg-approved'
   },
   {
     label: 'Declined Requests',
     value: 3,
-    icon: <FaTimesCircle className="text-red-500 text-3xl" />,
-    bg: 'bg-red-100'
+    icon: <FaTimesCircle className="icon icon-declined" />,
+    bgClass: 'bg-declined'
   },
 ];
 
 const StatCards = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
+    <div className="stat-cards-container">
       {statData.map((stat, index) => (
-        <div key={index} className={`rounded-2xl shadow-md p-6 flex items-center space-x-4 ${stat.bg}`}>
+        <div key={index} className={`stat-card ${stat.bgClass}`}>
           <div>{stat.icon}</div>
-          <div>
-            <div className="text-xl font-semibold">{stat.value}</div>
-            <div className="text-gray-700">{stat.label}</div>
+          <div className="stat-text">
+            <div className="stat-value">{stat.value}</div>
+            <div className="stat-label">{stat.label}</div>
           </div>
         </div>
       ))}
