@@ -1,3 +1,5 @@
+
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useState } from "react";
 import {
   Menu as MenuIcon,
@@ -28,6 +30,7 @@ export default function SideBarStudent() {
     },
     { icon: <CalendarIcon />, label: " Appointments" },
     { icon: <SettingsIcon />, label: "Settings" },
+    { icon: <LogoutIcon />, label: "Logout", path: "/"}
   ];
 
   const sidebarStyle = {
@@ -163,4 +166,5 @@ export default function SideBarStudent() {
       </div> */}
     </div>
   );
+
 }
