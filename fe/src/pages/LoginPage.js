@@ -21,7 +21,6 @@ const LoginPage = () => {
     password: "",
   });
 
-
   const validateField = (name, value) => {
     let errorMsg = "";
     if (name === "email") {
@@ -65,6 +64,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "auto";
@@ -168,7 +168,8 @@ const LoginPage = () => {
                 color: "maroon",
                 fontWeight: "bold",
               }}
-              onClick={() => navigate("/admin/dashboard")}>
+              onClick={() => navigate("/admin/dashboard")}
+            >
               Login
             </Button>
           </form>
