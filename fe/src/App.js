@@ -14,6 +14,8 @@ import Approved from "./pages/admin/AdminApproved";
 import Declined from "./pages/admin/AdminDeclined";
 import Pending from "./pages/admin/AdminPending";
 import AdminCalendar from "./pages/admin/AdminCalendar";
+import StudentDashboard from "./pages/student/StudentDashboard";
+import StudentRequestAppointment from "./pages/student/StudentRequestAppointment";
 
 function App() {
   return (
@@ -60,6 +62,8 @@ function AppContent() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/student-dashboard" element={<StudentDashboard />} />
+        <Route path="/student-book" element={<StudentRequestAppointment />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/approved" element={<Approved />} />
         <Route path="/admin/declined" element={<Declined />} />
