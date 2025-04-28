@@ -94,8 +94,7 @@ const LoginPage = () => {
           }
         );
 
-        if (res.status == 200) {
-          console.log(res.data);
+        if (res.status === 200) {
           localStorage.setItem("student", JSON.stringify(res.data));
           localStorage.setItem("isLoggedIn", true);
           setSnackbar({
@@ -113,6 +112,11 @@ const LoginPage = () => {
         }
       } catch (error) {
         console.log(error);
+        setSnackbar({
+          open: true,
+          message: error.response.data.message,
+          severity: "error",
+        });
       }
     } else {
       setSnackbar({
