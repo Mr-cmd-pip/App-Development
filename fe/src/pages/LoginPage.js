@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { motion } from "motion/react";
-
+import axios from "axios";
 const LoginPage = () => {
   const navigate = useNavigate();
 
@@ -77,18 +77,43 @@ const LoginPage = () => {
     validateField(name, value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    console.log("here");
     e.preventDefault();
     if (
       !Object.values(errors).some((error) => error) &&
       Object.values(form).every((val) => val)
     ) {
       console.table("Form Data:", form);
-      setSnackbar({
-        open: true,
-        message: "Login Successful",
-        severity: "success",
-      });
+      try {
+        const res = await axios.post(
+          "http://localhost:8080/api/student/login",
+          {
+            email: form.email,
+            password: form.password,
+          }
+        );
+
+        if (res.status == 200) {
+          console.log(res.data);
+          localStorage.setItem("student", JSON.stringify(res.data));
+          localStorage.setItem("isLoggedIn", true);
+          setSnackbar({
+            open: true,
+            message: "Login Successful",
+            severity: "success",
+          });
+          navigate("/student-dashboard");
+        } else {
+          setSnackbar({
+            open: true,
+            message: "Login Failed",
+            severity: "error",
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       setSnackbar({
         open: true,
@@ -168,7 +193,7 @@ const LoginPage = () => {
                 color: "maroon",
                 fontWeight: "bold",
               }}
-              onClick={() => navigate("/admin/dashboard")}
+              // onClick={() => navigate("/admin/dashboard")}
             >
               Login
             </Button>

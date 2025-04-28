@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import HomePage from "./pages/LandingPage";
@@ -16,6 +17,7 @@ import Pending from "./pages/admin/AdminPending";
 import AdminCalendar from "./pages/admin/AdminCalendar";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import StudentRequestAppointment from "./pages/student/StudentRequestAppointment";
+import StudentAppointments from "./pages/student/StudentAppointments";
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function AppContent() {
   const showNavBarPaths = ["/", "/login", "/register"];
   const shouldShowNavBar = showNavBarPaths.includes(location.pathname);
 
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
   return (
     <>
       {shouldShowNavBar && (
@@ -53,17 +57,49 @@ function AppContent() {
         <Route
           path="/"
           element={
-            <HomePage
-              homeRef={homeRef}
-              aboutRef={aboutRef}
-              contactRef={contactRef}
-            />
+            isLoggedIn ? (
+              <Navigate to="/student-dashboard" />
+            ) : (
+              <HomePage
+                homeRef={homeRef}
+                aboutRef={aboutRef}
+                contactRef={contactRef}
+              />
+            )
           }
         />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/student-dashboard" element={<StudentDashboard />} />
-        <Route path="/student-book" element={<StudentRequestAppointment />} />
+        <Route
+          path="/login"
+          element={
+            isLoggedIn ? <Navigate to="/student-dashboard" /> : <Login />
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            isLoggedIn ? <Navigate to="/student-dashboard" /> : <RegisterPage />
+          }
+        />
+        <Route
+          path="/student-dashboard"
+          element={isLoggedIn ? <StudentDashboard /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/student-book"
+          element={
+            isLoggedIn ? (
+              <StudentRequestAppointment />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/student-appointments"
+          element={
+            isLoggedIn ? <StudentAppointments /> : <Navigate to="/login" />
+          }
+        />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/approved" element={<Approved />} />
         <Route path="/admin/declined" element={<Declined />} />

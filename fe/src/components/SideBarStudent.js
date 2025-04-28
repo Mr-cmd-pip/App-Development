@@ -1,5 +1,4 @@
-
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useState } from "react";
 import {
   Menu as MenuIcon,
@@ -28,9 +27,13 @@ export default function SideBarStudent() {
       label: "Book ",
       path: "/student-book",
     },
-    { icon: <CalendarIcon />, label: " Appointments" },
+    {
+      icon: <CalendarIcon />,
+      path: "/student-appointments",
+      label: " Appointments",
+    },
     { icon: <SettingsIcon />, label: "Settings" },
-    { icon: <LogoutIcon />, label: "Logout", path: "/"}
+    { icon: <LogoutIcon />, label: "Logout", path: "/" },
   ];
 
   const sidebarStyle = {
@@ -127,6 +130,10 @@ export default function SideBarStudent() {
             {menuItems.map((item, index) => (
               <li
                 onClick={() => {
+                  if (item.label == "Logout") {
+                    localStorage.removeItem("student");
+                    localStorage.removeItem("isLoggedIn");
+                  }
                   if (item.path) {
                     goTo(item.path);
                   }
@@ -166,5 +173,4 @@ export default function SideBarStudent() {
       </div> */}
     </div>
   );
-
 }

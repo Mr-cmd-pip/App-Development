@@ -12,12 +12,15 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { motion } from "motion/react";
+import axios from "axios";
 
 const RegisterPage = () => {
   const [form, setForm] = useState({
     firstname: "",
     lastname: "",
     email: "",
+    yrlevel: "",
+    department: "",
     password: "",
     confirmPassword: "",
   });
@@ -32,7 +35,7 @@ const RegisterPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.body.style.overflow = "hidden";
+    // document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "auto";
     };
@@ -56,6 +59,16 @@ const RegisterPage = () => {
     if (name === "confirmPassword") {
       errorMsg = value !== form.password ? "Passwords do not match" : "";
     }
+    if (name === "yrlevel") {
+      const yrlevelRegex = /^\d*[1-9]\d*$/;
+      const hasDecimal = /\./.test(value);
+      const isNegative = value < 0;
+      const isZero = value === 0;
+      errorMsg =
+        yrlevelRegex.test(value) && !hasDecimal && !isNegative && !isZero
+          ? ""
+          : "Invalid year level";
+    }
     setErrors((prev) => ({ ...prev, [name]: errorMsg }));
   };
 
@@ -78,18 +91,60 @@ const RegisterPage = () => {
     return "";
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    setSnackbar({
+      open: true,
+      message: "Registering...",
+      severity: "info",
+    });
     e.preventDefault();
     if (
       !Object.values(errors).some((error) => error) &&
       Object.values(form).every((val) => val)
     ) {
       console.table("Form Data:", form);
-      setSnackbar({
-        open: true,
-        message: "Registration Successful",
-        severity: "success",
-      });
+      try {
+        const res = await axios.post(
+          "http://localhost:8080/api/student/register",
+          {
+            password: form.password,
+            fname: form.firstname,
+            email: form.email,
+            departmentname: form.department,
+            lname: form.lastname,
+            yrlevel: form.yrlevel,
+          }
+        );
+        if (res.status === 200) {
+          setSnackbar({
+            open: true,
+            message: "Registration Successful, You may now login",
+            severity: "success",
+          });
+        } else {
+          setSnackbar({
+            open: true,
+            message: "Registration Failed",
+            severity: "error",
+          });
+        }
+      } catch (error) {
+        setSnackbar({
+          open: true,
+          message: "An error occurred during registration",
+          severity: "error",
+        });
+      } finally {
+        setForm({
+          firstname: "",
+          lastname: "",
+          email: "",
+          yrlevel: "",
+          department: "",
+          password: "",
+          confirmPassword: "",
+        });
+      }
     } else {
       setSnackbar({
         open: true,
@@ -106,7 +161,7 @@ const RegisterPage = () => {
         display: "flex",
         justifyContent: "center",
         height: "100vh",
-        overflow: "hidden",
+        // overflow: "hidden",
       }}
     >
       <motion.div
@@ -114,7 +169,7 @@ const RegisterPage = () => {
         animate={{ opacity: 1, y: 0, transition: { duration: 0.4 } }}
       >
         <Box
-          mt={8}
+          mt={2}
           p={4}
           boxShadow={3}
           borderRadius={2}
@@ -148,6 +203,26 @@ const RegisterPage = () => {
                 />
               </Grid>
             </Grid>
+            <TextField
+              fullWidth
+              label="Year Level"
+              name="yrlevel"
+              margin="normal"
+              type="number"
+              onChange={handleChange}
+              error={!!errors.yrlevel}
+              helperText={errors.yrlevel}
+            />
+            <TextField
+              fullWidth
+              label="Department Name"
+              name="department"
+              margin="normal"
+              onChange={handleChange}
+              error={!!errors.department}
+              helperText={errors.department}
+            />
+
             <TextField
               fullWidth
               label="Email"

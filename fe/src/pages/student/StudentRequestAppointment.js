@@ -8,8 +8,11 @@ import {
   Button,
   Paper,
   Grid,
+  Snackbar,
+  Alert,
   Stack,
 } from "@mui/material";
+import axios from "axios";
 
 const appointmentTypes = [
   "Course Withdrawal",
@@ -27,15 +30,107 @@ const StudentRequestAppointment = () => {
     preferredTime: "",
     notes: "",
   });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    const user = JSON.parse(localStorage.getItem("student"));
+    console.log(user);
     e.preventDefault();
     console.log("Submitting Appointment:", form);
-    // TODO: Handle submission logic (e.g., API call)
+    const isEmpty = Object.values(form).some(
+      (value) => value === "" || value.trim() === ""
+    );
+    if (isEmpty) {
+      setSnackbar({
+        open: true,
+        message: "Please fill in all the fields",
+        severity: "error",
+      });
+      return;
+    }
+    const meetTime = new Date(`1970-01-01T${form.preferredTime}:00`);
+    const preferredDate = new Date(form.preferredDate);
+    const dayOfWeek = preferredDate.getUTCDay();
+
+    const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
+    const isSaturday = dayOfWeek === 6;
+
+    const isValidTime =
+      (isWeekday &&
+        meetTime >= new Date("1970-01-01T08:00:00") &&
+        meetTime <= new Date("1970-01-01T16:30:00")) ||
+      (isSaturday &&
+        meetTime >= new Date("1970-01-01T08:00:00") &&
+        meetTime <= new Date("1970-01-01T11:00:00"));
+
+    if (dayOfWeek === 0 || !isValidTime) {
+      setSnackbar({
+        open: true,
+        message: "Invalid meeting time. Please select a valid time and date.",
+        severity: "error",
+      });
+      return;
+    }
+    setSnackbar({
+      open: true,
+      message: "Please wait, your appointment request is being processed",
+      severity: "info",
+    });
+    try {
+      const res = await axios.post(
+        "http://localhost:8080/api/appointment/insert",
+        {
+          meetDate: form.preferredDate,
+          meetTime: form.preferredTime,
+          courseName: form.courseName,
+          status: "pending",
+          studentId: user.studentId,
+          department: form.department,
+          courseId: form.courseId,
+          notes: form.notes,
+          type: form.appointmentType,
+        }
+      );
+
+      if (res.status == 201) {
+        console.log(res.data);
+        setSnackbar({
+          open: true,
+          message: "Appointment Requested Successfully",
+          severity: "success",
+        });
+        setForm({
+          preferredDate: "",
+          preferredTime: "",
+          courseName: "",
+          department: "",
+          courseId: "",
+          notes: "",
+          appointmentType: "",
+        });
+      } else {
+        setSnackbar({
+          open: true,
+          message: res.data.message,
+          severity: "error",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setSnackbar({
+        open: true,
+        message: error.response.data.message,
+        severity: "error",
+      });
+    }
   };
 
   return (
@@ -143,6 +238,14 @@ const StudentRequestAppointment = () => {
           </form>
         </Paper>
       </Box>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+      </Snackbar>
     </div>
   );
 };
