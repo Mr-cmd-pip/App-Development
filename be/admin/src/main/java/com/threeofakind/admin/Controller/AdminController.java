@@ -13,6 +13,7 @@ import com.threeofakind.admin.Service.AdminService;
 
 @RestController
 @RequestMapping("/api/admins")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AdminController {
 
     @Autowired

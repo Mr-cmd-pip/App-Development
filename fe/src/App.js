@@ -42,6 +42,7 @@ function AppContent() {
   const shouldShowNavBar = showNavBarPaths.includes(location.pathname);
 
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const adminLoggedIn = localStorage.getItem("adminLoggedIn") === "true";
 
   return (
     <>
@@ -59,6 +60,8 @@ function AppContent() {
           element={
             isLoggedIn ? (
               <Navigate to="/student-dashboard" />
+            ) : adminLoggedIn ? (
+              <Navigate to="/admin/dashboard" />
             ) : (
               <HomePage
                 homeRef={homeRef}
@@ -68,18 +71,33 @@ function AppContent() {
             )
           }
         />
+
         <Route
           path="/login"
           element={
-            isLoggedIn ? <Navigate to="/student-dashboard" /> : <Login />
+            isLoggedIn ? (
+              <Navigate to="/student-dashboard" />
+            ) : adminLoggedIn ? (
+              <Navigate to="/admin/dashboard" />
+            ) : (
+              <Login />
+            )
           }
         />
+
         <Route
           path="/register"
           element={
-            isLoggedIn ? <Navigate to="/student-dashboard" /> : <RegisterPage />
+            isLoggedIn ? (
+              <Navigate to="/student-dashboard" />
+            ) : adminLoggedIn ? (
+              <Navigate to="/admin/dashboard" />
+            ) : (
+              <RegisterPage />
+            )
           }
         />
+
         <Route
           path="/student-dashboard"
           element={isLoggedIn ? <StudentDashboard /> : <Navigate to="/login" />}
@@ -100,11 +118,28 @@ function AppContent() {
             isLoggedIn ? <StudentAppointments /> : <Navigate to="/login" />
           }
         />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/approved" element={<Approved />} />
-        <Route path="/admin/declined" element={<Declined />} />
-        <Route path="/admin/pending" element={<Pending />} />
-        <Route path="/admin/calendar" element={<AdminCalendar />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            adminLoggedIn ? <AdminDashboard /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/admin/approved"
+          element={adminLoggedIn ? <Approved /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/admin/declined"
+          element={adminLoggedIn ? <Declined /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/admin/pending"
+          element={adminLoggedIn ? <Pending /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/admin/calendar"
+          element={adminLoggedIn ? <AdminCalendar /> : <Navigate to="/login" />}
+        />
       </Routes>
     </>
   );

@@ -9,10 +9,13 @@ import {
   Alert,
   IconButton,
   InputAdornment,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { motion } from "motion/react";
 import axios from "axios";
+
 const LoginPage = () => {
   const navigate = useNavigate();
 
@@ -20,6 +23,15 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
+
+  const [errors, setErrors] = useState({});
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [userType, setUserType] = useState("student"); // "student" or "admin"
 
   const validateField = (name, value) => {
     let errorMsg = "";
@@ -29,9 +41,6 @@ const LoginPage = () => {
     }
     if (name === "password") {
       errorMsg = validatePassword(value);
-    }
-    if (name === "confirmPassword") {
-      errorMsg = value !== form.password ? "Passwords do not match" : "";
     }
     setErrors((prev) => ({ ...prev, [name]: errorMsg }));
   };
@@ -55,14 +64,6 @@ const LoginPage = () => {
     return "";
   };
 
-  const [errors, setErrors] = useState({});
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "success",
-  });
-  const [showPassword, setShowPassword] = useState(false);
-
   useEffect(() => {
     window.scrollTo(0, 0);
     document.body.style.overflow = "hidden";
@@ -77,32 +78,48 @@ const LoginPage = () => {
     validateField(name, value);
   };
 
+  const handleUserTypeChange = (_, newType) => {
+    if (newType !== null) setUserType(newType);
+  };
+
   const handleSubmit = async (e) => {
-    console.log("here");
     e.preventDefault();
+
     if (
       !Object.values(errors).some((error) => error) &&
       Object.values(form).every((val) => val)
     ) {
-      console.table("Form Data:", form);
+      const apiUrl =
+        userType === "admin"
+          ? "http://localhost:8080/api/admins/login"
+          : "http://localhost:8080/api/student/login";
+
       try {
-        const res = await axios.post(
-          "http://localhost:8080/api/student/login",
-          {
-            email: form.email,
-            password: form.password,
-          }
-        );
+        const res = await axios.post(apiUrl, {
+          email: form.email,
+          password: form.password,
+        });
 
         if (res.status === 200) {
-          localStorage.setItem("student", JSON.stringify(res.data));
-          localStorage.setItem("isLoggedIn", true);
-          setSnackbar({
-            open: true,
-            message: "Login Successful",
-            severity: "success",
-          });
-          navigate("/student-dashboard");
+          if (userType === "admin") {
+            localStorage.setItem("admin", JSON.stringify(res.data));
+            localStorage.setItem("adminLoggedIn", true);
+            setSnackbar({
+              open: true,
+              message: "Admin login successful",
+              severity: "success",
+            });
+            navigate("/admin/dashboard");
+          } else {
+            localStorage.setItem("student", JSON.stringify(res.data));
+            localStorage.setItem("isLoggedIn", true);
+            setSnackbar({
+              open: true,
+              message: "Student login successful",
+              severity: "success",
+            });
+            navigate("/student-dashboard");
+          }
         } else {
           setSnackbar({
             open: true,
@@ -111,17 +128,17 @@ const LoginPage = () => {
           });
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
         setSnackbar({
           open: true,
-          message: error.response.data.message,
+          message: error.response?.data?.message || "Login error",
           severity: "error",
         });
       }
     } else {
       setSnackbar({
         open: true,
-        message: "Please input all fields",
+        message: "Please input all fields correctly",
         severity: "error",
       });
     }
@@ -157,6 +174,19 @@ const LoginPage = () => {
           >
             Login Account
           </Typography>
+
+          <ToggleButtonGroup
+            color="primary"
+            value={userType}
+            exclusive
+            onChange={handleUserTypeChange}
+            fullWidth
+            sx={{ mt: 2, mb: 3 }}
+          >
+            <ToggleButton value="student">Student</ToggleButton>
+            <ToggleButton value="admin">Admin</ToggleButton>
+          </ToggleButtonGroup>
+
           <form onSubmit={handleSubmit}>
             <TextField
               fullWidth
@@ -197,13 +227,13 @@ const LoginPage = () => {
                 color: "maroon",
                 fontWeight: "bold",
               }}
-              // onClick={() => navigate("/admin/dashboard")}
             >
               Login
             </Button>
           </form>
         </Box>
       </motion.div>
+
       <Snackbar
         open={snackbar.open}
         autoHideDuration={4000}
