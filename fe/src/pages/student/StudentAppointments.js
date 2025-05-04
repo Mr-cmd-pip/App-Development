@@ -123,7 +123,7 @@ const StudentAppointments = () => {
         >
           <Tab label="Pending" value="pending" />
           <Tab label="Canceled" value="canceled" />
-          <Tab label="Completed" value="completed" />
+          <Tab label="Approved" value="approved" />
           <Tab label="Declined" value="declined" />
         </Tabs>
 

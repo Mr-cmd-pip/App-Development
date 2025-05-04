@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideBarStudent from "../../components/SideBarStudent";
 import {
   Box,
@@ -35,6 +35,44 @@ const StudentRequestAppointment = () => {
     message: "",
     severity: "success",
   });
+  const [dailyLimit, setDailyLimit] = useState(0);
+  const [appointmentsCount, setAppointmentsCount] = useState(0);
+
+  // Fetch daily limit and current appointments count
+  useEffect(() => {
+    const fetchDailyLimit = async () => {
+      try {
+        const limitRes = await axios.get(
+          "http://localhost:8080/dailyLimit/get"
+        );
+        setDailyLimit(limitRes.data.dailyLimit); // Assuming it returns { dailyLimit: number }
+      } catch (error) {
+        console.log("Error fetching daily limit", error);
+      }
+    };
+
+    const fetchAppointmentsCount = async () => {
+      try {
+        const res = await axios.post(
+          "http://localhost:8080/api/appointment/getAllAppointments"
+        );
+        const count = res.data.filter(
+          (appointment) =>
+            new Date(appointment.preferredDate).toLocaleDateString() ===
+            new Date(form.preferredDate).toLocaleDateString()
+        ).length;
+        setAppointmentsCount(count);
+      } catch (error) {
+        console.log("Error fetching appointments count", error);
+      }
+    };
+
+    if (form.preferredDate) {
+      fetchAppointmentsCount();
+    }
+
+    fetchDailyLimit();
+  }, [form.preferredDate]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -42,9 +80,8 @@ const StudentRequestAppointment = () => {
 
   const handleSubmit = async (e) => {
     const user = JSON.parse(localStorage.getItem("student"));
-    console.log(user);
     e.preventDefault();
-    console.log("Submitting Appointment:", form);
+
     const isEmpty = Object.values(form).some(
       (value) => value === "" || value.trim() === ""
     );
@@ -56,6 +93,7 @@ const StudentRequestAppointment = () => {
       });
       return;
     }
+
     const meetTime = new Date(`1970-01-01T${form.preferredTime}:00`);
     const preferredDate = new Date(form.preferredDate);
     const dayOfWeek = preferredDate.getUTCDay();
@@ -79,11 +117,48 @@ const StudentRequestAppointment = () => {
       });
       return;
     }
+
     setSnackbar({
       open: true,
       message: "Please wait, your appointment request is being processed",
       severity: "info",
     });
+
+    // 🧠 Daily Limit Constraint Logic
+    try {
+      const [limitRes, appointmentsRes] = await Promise.all([
+        axios.get("http://localhost:8080/dailyLimit/get"),
+        axios.post("http://localhost:8080/api/appointment/getAllAppointments"),
+      ]);
+
+      const dailyLimit = limitRes.data[0]?.dailylimit || 10;
+      const allAppointments = appointmentsRes.data;
+
+      const sameDayAppointments = allAppointments.filter(
+        (appointment) =>
+          appointment.meetDate === form.preferredDate &&
+          appointment.status.toLowerCase() !== "canceled"
+      );
+
+      if (sameDayAppointments.length >= dailyLimit) {
+        setSnackbar({
+          open: true,
+          message: `Daily appointment limit (${dailyLimit}) reached for this date.`,
+          severity: "error",
+        });
+        return;
+      }
+    } catch (err) {
+      console.error("Error checking daily limit or appointments", err);
+      setSnackbar({
+        open: true,
+        message: "Failed to validate daily limit. Try again later.",
+        severity: "error",
+      });
+      return;
+    }
+
+    // ✅ Proceed with creating the appointment
     try {
       const res = await axios.post(
         "http://localhost:8080/api/appointment/insert",
@@ -100,8 +175,7 @@ const StudentRequestAppointment = () => {
         }
       );
 
-      if (res.status == 201) {
-        console.log(res.data);
+      if (res.status === 201) {
         setSnackbar({
           open: true,
           message: "Appointment Requested Successfully",
@@ -127,7 +201,7 @@ const StudentRequestAppointment = () => {
       console.log(error);
       setSnackbar({
         open: true,
-        message: error.response.data.message,
+        message: error.response?.data?.message || "Something went wrong",
         severity: "error",
       });
     }

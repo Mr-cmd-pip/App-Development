@@ -59,4 +59,12 @@ public class AppointmentService {
         }
     }
 
+    public List<AppointmentEntity> findAllAppointments() {
+        return appointmentRepository.findAll();
+    }
+
+    public void updateAppointment(AppointmentEntity appointment) {
+        appointmentRepository.save(appointment);
+    }
+
 }

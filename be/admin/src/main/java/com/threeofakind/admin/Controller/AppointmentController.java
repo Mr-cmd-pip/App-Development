@@ -54,4 +54,72 @@ public class AppointmentController {
         return ResponseEntity.ok(Map.of("message", "Appointment canceled successfully", "status", "success"));
     }
 
+    @PostMapping("/getAllAppointments")
+    public ResponseEntity<Object> getAllAppointments() {
+        return new ResponseEntity<>(appointmentService.findAllAppointments(), HttpStatus.OK);
+    }
+
+    @PutMapping("/approveAppointment/{appointId}")
+    public ResponseEntity<Object> approveAppointment(@PathVariable Integer appointId) {
+        AppointmentEntity appointment = appointmentService.findByAppointId(appointId);
+        if (appointment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "Appointment not found", "status", "error"));
+        }
+
+        // Update the status to "approved"
+        appointment.setStatus("approved");
+
+        appointmentService.updateAppointment(appointment);
+
+        return ResponseEntity.ok(Map.of("message", "Appointment approved successfully", "status", "success"));
+    }
+
+    @PutMapping("/declineAppointment/{appointId}")
+    public ResponseEntity<Object> declineAppointment(@PathVariable Integer appointId) {
+        AppointmentEntity appointment = appointmentService.findByAppointId(appointId);
+        if (appointment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "Appointment not found", "status", "error"));
+        }
+
+        // Update the status to "approved"
+        appointment.setStatus("declined");
+
+        appointmentService.updateAppointment(appointment);
+
+        return ResponseEntity.ok(Map.of("message", "Appointment declined successfully", "status", "success"));
+    }
+
+    @PutMapping("/rescheduleAppointment/{appointId}")
+    public ResponseEntity<Object> rescheduleAppointment(
+            @PathVariable Integer appointId,
+            @RequestBody Map<String, String> requestData) {
+
+        AppointmentEntity appointment = appointmentService.findByAppointId(appointId);
+        if (appointment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "Appointment not found", "status", "error"));
+        }
+
+        String newDate = requestData.get("meetDate");
+        String newTime = requestData.get("meetTime");
+
+        // Check if the new date/time is already taken
+        AppointmentEntity existingAppointment = appointmentService.findByMeetDateAndMeetTime(newDate, newTime);
+        if (existingAppointment != null && !existingAppointment.getAppointId().equals(appointId)) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "Time slot already taken", "status", "error"));
+        }
+
+        // Update fields
+        appointment.setMeetDate(newDate);
+        appointment.setMeetTime(newTime);
+        appointment.setStatus("approved");
+
+        appointmentService.updateAppointment(appointment);
+
+        return ResponseEntity.ok(Map.of("message", "Appointment rescheduled successfully", "status", "success"));
+    }
+
 }

@@ -131,7 +131,9 @@ const LoginPage = () => {
         console.error(error);
         setSnackbar({
           open: true,
-          message: error.response?.data?.message || "Login error",
+          message:
+            error.response?.data?.message ||
+            "Login error, Credentials may be incorrect",
           severity: "error",
         });
       }

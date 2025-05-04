@@ -14,6 +14,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import Approved from "./pages/admin/AdminApproved";
 import Declined from "./pages/admin/AdminDeclined";
 import Pending from "./pages/admin/AdminPending";
+import DailyLimit from "./pages/admin/AdminDailyLimit";
 import AdminCalendar from "./pages/admin/AdminCalendar";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import StudentRequestAppointment from "./pages/student/StudentRequestAppointment";
@@ -136,9 +137,13 @@ function AppContent() {
           path="/admin/pending"
           element={adminLoggedIn ? <Pending /> : <Navigate to="/login" />}
         />
-        <Route
+        {/* <Route
           path="/admin/calendar"
           element={adminLoggedIn ? <AdminCalendar /> : <Navigate to="/login" />}
+        /> */}
+        <Route
+          path="/admin/dailylimit"
+          element={adminLoggedIn ? <DailyLimit /> : <Navigate to="/login" />}
         />
       </Routes>
     </>
